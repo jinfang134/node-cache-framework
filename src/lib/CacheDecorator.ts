@@ -39,7 +39,7 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
       const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
       const oldVal: any = cache.get(cacheKey);
       if (oldVal !== undefined) {
-        console.info('get data from cache: ', cacheKey);
+        console.info('get data from cache,key= ', cacheKey);
         return oldVal;
       }
       const result = originalMethod.apply(this, args);
@@ -54,6 +54,27 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
   };
 }
 
+
+export function CachePut(params?: CacheableParams): MethodDecorator {
+  params = getDefaultParams(params)
+  return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
+
+    const originalMethod = descriptor.value;
+    descriptor.value = function (...args: any[]) {
+      const cache: Cache = getCache(target, params);
+      const argsObj: any = getArgsObject(originalMethod, args)
+      const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
+      
+      const result: any = originalMethod.apply(this, args);
+      if (result !== undefined) {
+        console.info(`cache data: ${cacheKey} => ${result}`);
+        cache.put(cacheKey, result)
+      }
+      return result;
+    };
+    return descriptor;
+  };
+}
 
 export function CacheEvict(params?: CacheEvictParams): MethodDecorator {
   params = getDefaultParams(params)
