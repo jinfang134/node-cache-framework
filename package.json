@@ -1,0 +1,26 @@
+{
+  "name": "express-cache",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsc --build tsconfig.json -w",
+    "test": "ava-ts  test/*.test.ts",
+    "build": "tsc --build tsconfig.json"
+  },
+  "private": true,
+  "dependencies": {
+    "@types/express": "^4.17.6",
+    "express": "^4.17.1",
+    "reflect-metadata": "^0.1.13",
+    "tslib": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.1",
+    "ava": "^3.8.2",
+    "ava-ts": "^0.25.2",
+    "codelyzer": "^5.1.2",
+    "ts-node": "~8.3.0",
+    "tslint": "^6.1.2",
+    "typescript": "~3.7.5"
+  }
+}
