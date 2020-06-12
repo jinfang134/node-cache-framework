@@ -7,7 +7,6 @@
     "test": "ava-ts  test/*.test.ts",
     "build": "tsc --build tsconfig.json"
   },
-  "private": true,
   "dependencies": {
     "@types/express": "^4.17.6",
     "express": "^4.17.1",
