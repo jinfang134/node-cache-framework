@@ -35,10 +35,11 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
     const originalMethod = descriptor.value;
     descriptor.value = function (...args: any[]) {
       const cache: Cache = getCache(target, params);
-      const cacheKey: string = getKeyGenerator().generate(target, propertyKey, args, params.key);
+      const argsObj: any = getArgsObject(originalMethod, args)
+      const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
       const oldVal: any = cache.get(cacheKey);
       if (oldVal !== undefined) {
-        console.info('get data from cache: ', propertyKey);
+        console.info('get data from cache: ', cacheKey);
         return oldVal;
       }
       const result = originalMethod.apply(this, args);
@@ -62,7 +63,8 @@ export function CacheEvict(params?: CacheEvictParams): MethodDecorator {
     const originalMethod = descriptor.value;
     descriptor.value = function (...args: any[]) {
       const cache: Cache = getCache(target, params);
-      const cacheKey: string = getKeyGenerator().generate(target, propertyKey, args, params.key);
+      const argsObj: any = getArgsObject(originalMethod, args)
+      const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
 
       if (!params.afterInvocation) {
         if (params.allEntries) {
@@ -110,4 +112,12 @@ function getDefaultParams<T>(cacheParams: CacheParams): T {
 
 function getArgsObject(func: Function, args: any[]) {
   let paramName = getParamNames(func);
+  if (paramName.length == 0) {
+    return {}
+  }
+  let result = {}
+  for (let i = 0; i < paramName.length; i++) {
+    result[paramName[i]] = args[i]
+  }
+  return result;
 }

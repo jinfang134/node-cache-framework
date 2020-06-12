@@ -20,7 +20,7 @@ app.use(function (req, res, next) {
 class Hello {
 
   @Cacheable({
-    key: '${id}'
+    key: '${id}_${name}'
   })
   sayHello(id: number, name: string) {
     console.log('load from method.')
