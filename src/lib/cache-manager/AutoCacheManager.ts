@@ -1,9 +1,7 @@
 import { CacheManager } from './CacheManager';
 import { Cache } from '../CacheModel';
 import { SimpleCacheManager } from './SimpleCacheManager';
-import { getCacheType, createCache } from '../CacheInstance';
-import { CacheType } from 'src/lib/CacheModel';
-import { MemoryCache } from '../impl/MemoryCache';
+import { createCache } from '../CacheInstance';
 
 export class AutoCacheManager implements CacheManager {
     private readonly manager: CacheManager;

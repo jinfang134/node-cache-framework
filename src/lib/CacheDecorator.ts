@@ -64,7 +64,7 @@ export function CachePut(params?: CacheableParams): MethodDecorator {
       const cache: Cache = getCache(target, params);
       const argsObj: any = getArgsObject(originalMethod, args)
       const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
-      
+
       const result: any = originalMethod.apply(this, args);
       if (result !== undefined) {
         console.info(`cache data: ${cacheKey} => ${result}`);
@@ -115,7 +115,9 @@ function getCache(target: Object, params: CacheParams): Cache {
   if (!params || !params.cacheName) {
     cacheName = Reflect.getMetadata(METADATA_KEY_CACHE_DEFAULTS, target.constructor) || '';
   }
-
+  if (!cacheName) {
+    cacheName = 'default'
+  }
   const cache: Cache = getCacheManager().getCache(cacheName);
   if (!cache) {
     throw new Error(`Cache '${cacheName}' not found for ${target.constructor.name}`);
