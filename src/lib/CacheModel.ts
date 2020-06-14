@@ -1,4 +1,4 @@
-import { KeyGenerator } from './KeyGenerator';
+import { KeyGenerator } from './key-generator/KeyGenerator';
 
 export interface Cache {
 

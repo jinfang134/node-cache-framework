@@ -1,5 +1,5 @@
 import { DefaultKeyGenerator } from './KeyGenerator'
-import { hash } from './utils'
+import { hash } from '../utils'
 
 export class HashKeyGenerator extends DefaultKeyGenerator {
     generate(target: any, propertyKey: string | symbol, args: any, key?: string): string {

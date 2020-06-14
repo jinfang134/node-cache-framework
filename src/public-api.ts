@@ -11,5 +11,5 @@ export { Cache } from './lib/CacheModel';
 export { NoOpCache } from './lib/impl/no-op-cache';
 export { StorageCache } from './lib/impl/StorageCache';
 export { MemoryCache } from './lib/impl/MemoryCache';
-export { DefaultKeyGenerator } from './lib/KeyGenerator';
+export { DefaultKeyGenerator } from './lib/key-generator/KeyGenerator';
 export * from './lib/utils'

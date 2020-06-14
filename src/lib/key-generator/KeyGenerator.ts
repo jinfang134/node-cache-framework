@@ -1,4 +1,4 @@
-import { hashCode, hash } from './utils';
+import { hashCode, hash } from '../utils';
 
 export interface KeyGenerator {
     generate(target: any, propertyKey: string | symbol, args: any, key?: string): string;
