@@ -1,4 +1,4 @@
-const crypto = require('crypto');  // 加载crypto库
+import crypto = require('crypto');  // 加载crypto库
 
 /**
  * get parameter name for a function
@@ -18,14 +18,16 @@ export function getParamNames(func) {
 }
 
 export function hashCode(str: string) {
-    let hash = 0;
-    if (str.length == 0) return hash;
+    let hashStr = 0;
+    if (str.length === 0) return hashStr;
     for (let i = 0; i < str.length; i++) {
         const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
+        // tslint:disable-next-line: no-bitwise
+        hashStr = ((hashStr << 5) - hashStr) + char;
+        // tslint:disable-next-line: no-bitwise
+        hashStr = hashStr & hashStr; // Convert to 32bit integer
     }
-    return hash;
+    return hashStr;
 }
 
 export function hash(str: string) {

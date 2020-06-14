@@ -4,7 +4,7 @@ export class LoggingCache implements Cache {
     name: string;
     protected requests = 0;
     protected hits = 0;
-    protected logEnable = process.env.DEBUG_ENABLE == 'true';
+    protected logEnable = process.env.DEBUG_ENABLE === 'true';
 
     private readonly cache: Cache;
 

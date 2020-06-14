@@ -33,7 +33,7 @@ export interface Cache {
 
 export interface CacheConfig {
   type: string;
-  ttl?: Number,
+  ttl?: number,
   maxKeys?: number,
   keyGenerator?: KeyGenerator,
 }

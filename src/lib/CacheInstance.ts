@@ -41,15 +41,15 @@ export function createCache(name: string): Cache {
 }
 
 export function initCache(config: CacheConfig) {
-  if (config.keyGenerator == undefined) {
+  if (!config.keyGenerator ) {
     // CACHE_INSTANCE.keyGenerator = new DefaultKeyGenerator();
     CACHE_INSTANCE.keyGenerator = new HashKeyGenerator();
   } else {
     CACHE_INSTANCE.keyGenerator = config.keyGenerator
   }
   setCacheType(config.type)
-  const default_cache: Cache = createCache('default')
-  CACHE_INSTANCE.manager = new AutoCacheManager([default_cache]);
+  const defaultCache: Cache = createCache('default')
+  CACHE_INSTANCE.manager = new AutoCacheManager([defaultCache]);
 }
 
 export function getKeyGenerator() {

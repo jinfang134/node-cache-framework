@@ -19,11 +19,12 @@ export interface CacheEvictParams extends CacheParams {
 }
 
 export interface CacheableParams extends CacheParams {
+  ttl?: number // second
 }
 
 
 export function CacheConfig(cacheName: string): ClassDecorator {
-  return (target: Function): void => {
+  return (target: any): void => {
     Reflect.defineMetadata(METADATA_KEY_CACHE_DEFAULTS, cacheName, target);
   };
 }
@@ -32,7 +33,7 @@ function CacheAction<T extends CacheParams>(action: (cache, cacheKey, originalMe
   params = getDefaultParams(params);
   return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
     const originalMethod = descriptor.value;
-    descriptor.value =  (...args: any[]) =>{
+    descriptor.value = (...args: any[]) => {
       const cache: Cache = getCache(target, params);
       const argsObj: any = getArgsObject(originalMethod, args)
       const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
@@ -114,9 +115,9 @@ function getDefaultParams<T>(cacheParams: CacheParams): T {
 }
 
 
-function getArgsObject(func: ()=>{}, args: any[]) {
+function getArgsObject(func: () => {}, args: any[]) {
   const paramName = getParamNames(func);
-  if (paramName.length == 0) {
+  if (paramName.length === 0) {
     return {}
   }
   const result = {}
