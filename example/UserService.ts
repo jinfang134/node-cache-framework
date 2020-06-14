@@ -4,13 +4,13 @@ import { CacheConfig, Cacheable, CacheEvict, CachePut } from '../src/public-api'
 @CacheConfig('hello')
 export class UserService {
 
-    @Cacheable({ key: '${id}_${name}' })
+    @Cacheable()
     find(id: number, name: string) {
         console.log('load from method.')
         return 'hello'
     }
 
-    @Cacheable()
+    @Cacheable({key: 'user_${id}'})
     getUser(id: number) {
         console.log('get user from db')
         return {
@@ -26,7 +26,7 @@ export class UserService {
         return user
     }
 
-    @CacheEvict()
+    @CacheEvict({key: 'user_${id}'})
     deleteUser(id: number) {
         console.log('delete user from db')
     }
@@ -34,6 +34,6 @@ export class UserService {
 
     @CacheEvict({ allEntries: true })
     deleteAllUsers() {
-        console.log('clear cache')
+        console.log('db: delete all user')
     }
 }

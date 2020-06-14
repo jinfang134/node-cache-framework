@@ -15,7 +15,7 @@ export interface CacheParams {
 
 export interface CacheEvictParams extends CacheParams {
   afterInvocation?: boolean;
-  allEntries: boolean;
+  allEntries?: boolean;
 }
 
 export interface CacheableParams extends CacheParams {
@@ -47,12 +47,10 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
   return CacheAction<CacheableParams>((cache, cacheKey, originalMethod, args) => {
     const oldVal: any = cache.get(cacheKey);
     if (oldVal !== undefined) {
-      console.info('get data from cache,key= ', cacheKey);
       return oldVal;
     }
     const result = originalMethod.apply(this, args);
     if (result !== undefined) {
-      console.info(`cache data: ${cacheKey} => ${result}`);
       cache.put(cacheKey, result)
     }
     return result;
@@ -65,7 +63,6 @@ export function CachePut(params?: CacheableParams): MethodDecorator {
   return CacheAction<CacheableParams>((cache, cacheKey, originalMethod, args) => {
     const result: any = originalMethod.apply(this, args);
     if (result !== undefined) {
-      console.info(`cache data: ${cacheKey} => ${result}`);
       cache.put(cacheKey, result)
     }
     return result;
