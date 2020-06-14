@@ -22,7 +22,6 @@ export class MemoryCache implements Cache {
   }
 
   put<T>(key: string, value: T): void {
-    console.log('set ',key,value)
     this.cache.set(key, value);
   }
 
