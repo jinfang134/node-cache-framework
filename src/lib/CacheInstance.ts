@@ -2,7 +2,8 @@ import { CacheManager } from './cache-manager/CacheManager';
 import { MemoryCache } from './impl/MemoryCache';
 import { Cache, CacheType, CacheConfig } from './CacheModel';
 import { AutoCacheManager } from './cache-manager/AutoCacheManager';
-import { DefaultKeyGenerator } from './KeyGenerator';
+import { DefaultKeyGenerator, HashKeyGenerator } from './KeyGenerator';
+import { LoggingCache } from './impl/LoggingCache';
 
 const CACHE_INSTANCE = {
   manager: undefined,
@@ -36,12 +37,13 @@ export function createCache(name: string): Cache {
     default:
       cache = new MemoryCache(name)
   }
-  return cache;
+  return new LoggingCache(cache);
 }
 
 export function initCache(config: CacheConfig) {
   if (config.keyGenerator == undefined) {
-    CACHE_INSTANCE.keyGenerator = new DefaultKeyGenerator();
+    // CACHE_INSTANCE.keyGenerator = new DefaultKeyGenerator();
+    CACHE_INSTANCE.keyGenerator = new HashKeyGenerator();
   } else {
     CACHE_INSTANCE.keyGenerator = config.keyGenerator
   }

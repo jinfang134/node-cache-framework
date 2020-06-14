@@ -1,3 +1,4 @@
+import { hashCode, hash } from './utils';
 
 export interface KeyGenerator {
     generate(target: Object, propertyKey: string | symbol, args: any, key?: string): string;
@@ -23,7 +24,17 @@ export class DefaultKeyGenerator implements KeyGenerator {
             return propertyKey.toString() + JSON.stringify(args)
         }
         console.log('args:', JSON.stringify(args))
-        return propertyKey.toString() + this.template(key, args)
+        return this.template(key, args)
     }
 
+}
+
+export class HashKeyGenerator extends DefaultKeyGenerator {
+    generate(target: Object, propertyKey: string | symbol, args: any, key?: string): string {
+        if (!key) {
+            return propertyKey.toString() +'_'+ hash(JSON.stringify(args))
+        }
+        console.log('args:', JSON.stringify(args))
+        return this.template(key, args)
+    }
 }
