@@ -1,14 +1,14 @@
-import {initCache} from '../src/public-api'
+import { initCache } from '../src/public-api'
 import { UserService } from './UserService';
 
 
 const service = new UserService();
 
 initCache({
-        type: 'memory',
+    type: 'memory',
 })
 
-function main(){
+function main() {
     service.getUser(23);
     service.getUser(23);
     service.deleteUser(23)
@@ -16,8 +16,8 @@ function main(){
     service.deleteAllUsers()
     service.getUser(23)
 
-    service.find(12,'test');
-    service.find(12,'test');
+    service.find(12, 'test');
+    service.find(12, 'test');
 }
 
 main();

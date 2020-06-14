@@ -24,7 +24,7 @@ export class StorageCache implements Cache {
       return undefined;
     }
 
-    return <T> JSON.parse(value) || null;
+    return (JSON.parse(value) as T) || null;
   }
 
   put<T>(key: string, value: T): void {

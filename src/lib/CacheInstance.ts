@@ -30,7 +30,7 @@ export function setCacheType(type: string): void {
 }
 
 export function createCache(name: string): Cache {
-  let cache: Cache = undefined;
+  let cache: Cache;
   switch (CACHE_INSTANCE.type) {
     case CacheType.MEMORY_CACHE:
       cache = new MemoryCache(name)
@@ -48,7 +48,7 @@ export function initCache(config: CacheConfig) {
     CACHE_INSTANCE.keyGenerator = config.keyGenerator
   }
   setCacheType(config.type)
-  let default_cache: Cache = createCache('default')
+  const default_cache: Cache = createCache('default')
   CACHE_INSTANCE.manager = new AutoCacheManager([default_cache]);
 }
 

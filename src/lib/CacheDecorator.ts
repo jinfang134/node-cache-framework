@@ -28,11 +28,11 @@ export function CacheConfig(cacheName: string): ClassDecorator {
   };
 }
 
-function CacheAction<T extends CacheParams>(action: Function, params?: T): MethodDecorator {
+function CacheAction<T extends CacheParams>(action: (cache, cacheKey, originalMethod, args) => {}, params?: T): MethodDecorator {
   params = getDefaultParams(params);
-  return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
+  return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
     const originalMethod = descriptor.value;
-    descriptor.value = function (...args: any[]) {
+    descriptor.value =  (...args: any[]) =>{
       const cache: Cache = getCache(target, params);
       const argsObj: any = getArgsObject(originalMethod, args)
       const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
@@ -94,8 +94,8 @@ export function CacheEvict(params?: CacheEvictParams): MethodDecorator {
 }
 
 
-function getCache(target: Object, params: CacheParams): Cache {
-  let cacheName: string = undefined
+function getCache(target: any, params: CacheParams): Cache {
+  let cacheName: string
   if (!params || !params.cacheName) {
     cacheName = Reflect.getMetadata(METADATA_KEY_CACHE_DEFAULTS, target.constructor) || 'default';
   }
@@ -114,12 +114,12 @@ function getDefaultParams<T>(cacheParams: CacheParams): T {
 }
 
 
-function getArgsObject(func: Function, args: any[]) {
-  let paramName = getParamNames(func);
+function getArgsObject(func: ()=>{}, args: any[]) {
+  const paramName = getParamNames(func);
   if (paramName.length == 0) {
     return {}
   }
-  let result = {}
+  const result = {}
   for (let i = 0; i < paramName.length; i++) {
     result[paramName[i]] = args[i]
   }

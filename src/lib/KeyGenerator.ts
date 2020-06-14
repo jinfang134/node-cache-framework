@@ -9,8 +9,8 @@ export class DefaultKeyGenerator implements KeyGenerator {
     }
 
     template(tpl, data) {
-        var pattern = /\$\{([^\}\}]+)?\}/g;
-        var body = 'return "';
+        const pattern = /\$\{([^\}\}]+)?\}/g;
+        let body = 'return "';
         body += tpl.replace(pattern, function (m, g) {
             return '" + this.' + g.trim() + ' + "';
         });
@@ -19,7 +19,7 @@ export class DefaultKeyGenerator implements KeyGenerator {
     };
 
 
-    generate(target: Object, propertyKey: string | symbol, args: any, key?: string): string {
+    generate(target: any, propertyKey: string | symbol, args: any, key?: string): string {
         if (!key) {
             return propertyKey.toString() + JSON.stringify(args)
         }
