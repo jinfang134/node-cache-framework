@@ -8,6 +8,9 @@ export class MemoryCache implements Cache {
   constructor(name: string) {
     this.name = name;
   }
+  keys(): string[] {
+    return Array.from(this.cache.keys());
+  }
 
   clear(): void {
     this.cache.clear();

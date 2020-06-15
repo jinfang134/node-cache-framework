@@ -7,6 +7,9 @@ export class NoOpCache implements Cache {
   constructor(name: string) {
     this.name = name;
   }
+  keys(): string[] {
+    throw new Error('Method not implemented.');
+  }
 
   // tslint:disable-next-line: no-empty
   clear(): void {

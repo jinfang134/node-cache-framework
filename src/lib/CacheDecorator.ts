@@ -37,7 +37,7 @@ function CacheAction<T extends CacheParams>(action: (cache, cacheKey, originalMe
       const cache: Cache = getCache(target, params);
       const argsObj: any = getArgsObject(originalMethod, args)
       const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
-      return action(cache, cacheKey, originalMethod, argsObj);
+      return action(cache, cacheKey, originalMethod, args);
     };
     return descriptor;
   };

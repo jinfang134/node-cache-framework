@@ -12,6 +12,9 @@ export class LoggingCache implements Cache {
         this.cache = cache;
         this.name = cache.name;
     }
+    keys(): string[] {
+        return this.cache.keys();
+    }
 
 
 

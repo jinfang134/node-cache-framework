@@ -11,6 +11,9 @@ class MyCache implements Cache {
     constructor(name: string) {
         this.name = name;
     }
+    keys(): string[] {
+        return Array.from(this.cache.keys());
+    }
 
     clear(): void {
         this.cache.clear();
@@ -27,6 +30,8 @@ class MyCache implements Cache {
     put<T>(key: string, value: T): void {
         this.cache.set(key, value);
     }
+
+
 }
 
 initCache({

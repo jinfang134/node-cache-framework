@@ -29,6 +29,8 @@ export interface Cache {
    */
   clear(): void;
 
+  keys(): string[];
+
 }
 
 export interface CacheConfig {

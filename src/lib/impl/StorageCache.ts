@@ -10,6 +10,10 @@ export class StorageCache implements Cache {
     this.storage = storage;
   }
 
+  keys(): string[] {
+    throw new Error('Method not implemented.');
+  }
+
   clear(): void {
     this.storage.clear();
   }
