@@ -1,8 +1,8 @@
 import { EnableCaching } from '../src/public-api'
 import { UserService } from './UserService';
 
-let express = require('express')
-let app = express()
+const express = require('express')
+const app = express()
 
 const service = new UserService();
 

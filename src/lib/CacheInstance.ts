@@ -15,6 +15,7 @@ const CACHE_INSTANCE = {
 
 export function createCache(name: string): Cache {
   return new LoggingCache(new CACHE_INSTANCE.cache(name));
+  // return new CACHE_INSTANCE.cache(name);
 }
 
 export function initCache(config: CacheConfig) {
