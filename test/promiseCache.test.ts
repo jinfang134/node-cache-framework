@@ -103,7 +103,7 @@ initCache({
 
 const cache = getCacheManager().getCache('hello')
 
-test('cache data at first time', async  t => {
+test.skip('cache data at first time', async  t => {
     const user = await service.getUser(2);
     t.deepEqual(await cache.get('user_2'), user);
 })
