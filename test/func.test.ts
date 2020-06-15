@@ -4,7 +4,7 @@ import { getParamNames } from '../src/public-api'
 
 
 
-test('template', async t => {
+test('template',  t => {
     // tslint:disable-next-line: no-empty
     const list = getParamNames( (name: string, id: number)=> { })
     console.log(list)
