@@ -1,6 +1,6 @@
 import AWS = require("aws-sdk");
-import { initCache, Cache } from '../src/public-api'
 import { DocumentClient, GetItemInput } from 'aws-sdk/clients/dynamodb';
+import { Cache } from '../CacheModel';
 
 AWS.config.update({
     region: "ap-northeast-1",
@@ -74,5 +74,3 @@ export class DynamoDBCache implements Cache {
     }
 }
 
-const cache = new DynamoDBCache('test');
-cache.put('sdfdf', 'sdfsfdf')

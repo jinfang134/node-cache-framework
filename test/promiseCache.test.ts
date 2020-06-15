@@ -1,6 +1,5 @@
 import test from 'ava';
-import { CacheConfig, Cacheable, CachePut, CacheEvict, getCacheManager, initCache, Cache } from '../src/public-api';
-import { DynamoDBCache } from '../example/DynamoDBCache';
+import { CacheConfig, Cacheable, CachePut, CacheEvict, getCacheManager, initCache, Cache, DynamoDBCache } from '../src/public-api';
 
 @CacheConfig('hello')
 class UserService {
