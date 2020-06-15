@@ -13,6 +13,7 @@ class UserService {
     @Cacheable({ key: 'user_${id}' })
     getUser(id: number) {
         console.log('get user from db')
+        this.deleteAllUsers();
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve({
@@ -26,6 +27,7 @@ class UserService {
 
     @CachePut({ key: '${id}' })
     saveUser(id: number, user: any) {
+        this.deleteAllUsers()
         console.log('save to db:', user)
         return user
     }
@@ -70,7 +72,7 @@ test('clear cache', t => {
         service.saveUser(i, { id: i, name: 'name' + i })
     }
     let keys = cache.keys() as string[];
-    t.is(keys.length, 10)
+    t.is(keys.length, 1)
     console.log(keys)
     service.deleteAllUsers();
     keys = cache.keys() as string[]
