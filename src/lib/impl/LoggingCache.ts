@@ -12,15 +12,15 @@ export class LoggingCache implements Cache {
         this.cache = cache;
         this.name = cache.name;
     }
-    keys(): string[] {
+    keys(): string[] | Promise<string[]> {
         return this.cache.keys();
     }
 
 
 
-    get<T>(key: string): T {
+    get<T>(key: string): T | Promise<T> {
         this.requests++;
-        const value: T = this.cache.get(key)
+        const value: T | Promise<T> = this.cache.get(key)
         if (value != null) {
             this.hits++;
         }

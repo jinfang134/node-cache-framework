@@ -69,7 +69,9 @@ test('clear cache', t => {
     for (let i = 0; i < 10; i++) {
         service.saveUser(i, { id: i, name: 'name' + i })
     }
-    t.is(cache.keys().length, 10)
+    let keys  = cache.keys() as string[];
+    t.is(keys.length, 10)
     service.deleteAllUsers();
-    t.is(cache.keys().length, 0)
+    keys=cache.keys() as string[]
+    t.is(keys.length, 0)
 })

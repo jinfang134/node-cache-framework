@@ -8,7 +8,7 @@ export class MemoryCache implements Cache {
   constructor(name: string) {
     this.name = name;
   }
-  keys(): string[] {
+  keys(): string[] | Promise<string[]> {
     return Array.from(this.cache.keys());
   }
 

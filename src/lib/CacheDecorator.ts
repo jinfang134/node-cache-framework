@@ -45,10 +45,16 @@ function CacheAction<T extends CacheParams>(action: (cache, cacheKey, originalMe
 
 export function Cacheable(params?: CacheableParams): MethodDecorator {
   params = getDefaultParams(params);
-  return CacheAction<CacheableParams>((cache, cacheKey, originalMethod, args) => {
+  return CacheAction<CacheableParams>(async (cache, cacheKey, originalMethod, args) => {
     const oldVal: any = cache.get(cacheKey);
-    if (oldVal !== undefined) {
+    if (!isPromise(oldVal) && oldVal) {
       return oldVal;
+    }
+    if (isPromise(oldVal)) {
+      const data = await oldVal
+      if (data !== undefined) {
+        return oldVal;
+      }
     }
     const result = originalMethod.apply(this, args);
     if (isPromise(result)) {
