@@ -89,20 +89,20 @@ export function CachePut(params?: CacheableParams): MethodDecorator {
 
 export function CacheEvict(params?: CacheEvictParams): MethodDecorator {
   params = getDefaultParams(params);
-  return CacheAction<CacheEvictParams>((cache, cacheKey, originalMethod, args) => {
+  return CacheAction<CacheEvictParams>(async (cache, cacheKey, originalMethod, args) => {
     if (!params.afterInvocation) {
       if (params.allEntries) {
-        cache.clear()
+        await cache.clear()
       } else {
-        cache.evict(cacheKey);
+        await cache.evict(cacheKey);
       }
     }
     const result: any = originalMethod.apply(this, args);
     if (params.afterInvocation) {
       if (params.allEntries) {
-        cache.clear()
+        await cache.clear()
       } else {
-        cache.evict(cacheKey);
+        await cache.evict(cacheKey);
       }
     }
     return result;

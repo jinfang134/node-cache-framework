@@ -8,7 +8,7 @@ const service = new UserService();
 
 
 initCache({
-    // cache: MyCache,
+    cache: DynamoDBCache,
 })
 
 function main() {

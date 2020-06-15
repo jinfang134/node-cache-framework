@@ -1,5 +1,6 @@
 import test from 'ava';
 import { CacheConfig, Cacheable, CachePut, CacheEvict, getCacheManager, initCache, Cache } from '../src/public-api';
+import { DynamoDBCache } from '../example/DynamoDBCache';
 
 @CacheConfig('hello')
 class UserService {
@@ -16,7 +17,7 @@ class UserService {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve({
-                    id: 23,
+                    id,
                     name: 'user',
                     age: '23'
                 })
@@ -53,7 +54,7 @@ class PromiseCache implements Cache {
         this.name = name;
     }
 
-    keys(): string[] | Promise<string[]> {
+    keys(): Promise<string[]> {
         const self = this
         return new Promise((resolve, reject) => {
             setInterval(() => {
@@ -98,7 +99,7 @@ class PromiseCache implements Cache {
 
 const service = new UserService();
 initCache({
-    cache: PromiseCache
+    cache: DynamoDBCache
 })
 
 const cache = getCacheManager().getCache('hello')
@@ -120,7 +121,7 @@ test('evict for specific key in cache', async t => {
     t.is(await cache.get('user_4'), undefined, '')
 })
 
-test.after('clear cache', async t => {
+test.skip('clear cache', async t => {
     cache.clear()
     for (let i = 0; i < 10; i++) {
         service.saveUser(i, { id: i, name: 'name' + i })

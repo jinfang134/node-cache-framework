@@ -29,7 +29,7 @@ export class DynamoDBCache implements Cache {
                 "tenant": 'hrtommt-develop#' + this.name,
             }
         };
-        this.client.delete(params)
+       this.client.delete(params).promise()
     }
 
     evict(key: string): void {
@@ -40,7 +40,7 @@ export class DynamoDBCache implements Cache {
                 id: key,
             }
         };
-        this.client.delete(params)
+        this.client.delete(params).promise()
     }
 
     async get<T>(key: string): Promise<T> {
@@ -68,6 +68,11 @@ export class DynamoDBCache implements Cache {
                 value
             }
         };
-        this.client.put(params)
+        this.client.put(params).promise().then((data) => {
+            console.log(data)
+        })
     }
 }
+
+const cache = new DynamoDBCache('test');
+cache.put('sdfdf', 'sdfsfdf')
