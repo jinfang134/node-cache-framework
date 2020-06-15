@@ -32,10 +32,10 @@ export interface Cache {
 }
 
 export interface CacheConfig {
-  type: string;
   ttl?: number,
   maxKeys?: number,
   keyGenerator?: KeyGenerator,
+  cache?: new (name: string) => Cache,
 }
 
 export enum CacheType {

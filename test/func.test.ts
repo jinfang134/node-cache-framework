@@ -5,7 +5,8 @@ import { getParamNames } from '../src/public-api'
 
 
 test('template', async t => {
-    let list = getParamNames(function (name: string, id: number) { })
+    // tslint:disable-next-line: no-empty
+    const list = getParamNames( (name: string, id: number)=> { })
     console.log(list)
     t.deepEqual(list, ['name', 'id'])
 })

@@ -1,32 +1,32 @@
 import { EnableCaching } from '../src/public-api'
 import { UserService } from './UserService';
 
-var express = require('express')
-var app = express()
+let express = require('express')
+let app = express()
 
 const service = new UserService();
 
 app.use(EnableCaching({
-  type: 'memory',
+
 }))
 
 
 
 app.get('/user', (req, res) => {
-  let result = service.getUser(3243)
+  const result = service.getUser(3243)
   console.log(result);
   res.json(result)
 })
 
 app.get('/clear', (req, res) => {
-  let result = service.deleteAllUsers()
+  const result = service.deleteAllUsers()
   console.log(result);
   res.json(result)
 })
 
 
 app.post('/user', (req, res) => {
-  let result = service.saveUser(3243, {
+  const result = service.saveUser(3243, {
     name: 'foobar',
     age: 2233
   })

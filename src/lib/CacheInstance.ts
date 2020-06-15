@@ -9,46 +9,17 @@ import { HashKeyGenerator } from './key-generator/HashKeyGenerator';
 const CACHE_INSTANCE = {
   manager: undefined,
   keyGenerator: undefined,
-  type: undefined,
+  cache: undefined
 };
 
 
-export function getCacheType() {
-  return CACHE_INSTANCE.type
-}
-
-export function setCacheType(type: string): void {
-  switch (type) {
-    case 'memory':
-      CACHE_INSTANCE.type = CacheType.MEMORY_CACHE
-      break;
-    case 'lru':
-      CACHE_INSTANCE.type = CacheType.LUR_CACHE
-    default:
-      break;
-  }
-  CACHE_INSTANCE.type = type
-}
-
 export function createCache(name: string): Cache {
-  let cache: Cache;
-  switch (CACHE_INSTANCE.type) {
-    case CacheType.MEMORY_CACHE:
-      cache = new MemoryCache(name)
-    default:
-      cache = new MemoryCache(name)
-  }
-  return new LoggingCache(cache);
+  return new LoggingCache(new CACHE_INSTANCE.cache(name));
 }
 
 export function initCache(config: CacheConfig) {
-  if (!config.keyGenerator) {
-    // CACHE_INSTANCE.keyGenerator = new DefaultKeyGenerator();
-    CACHE_INSTANCE.keyGenerator = new HashKeyGenerator();
-  } else {
-    CACHE_INSTANCE.keyGenerator = config.keyGenerator
-  }
-  setCacheType(config.type)
+  CACHE_INSTANCE.keyGenerator = config.keyGenerator || new HashKeyGenerator();
+  CACHE_INSTANCE.cache = config.cache || MemoryCache
   const defaultCache: Cache = createCache('default')
   CACHE_INSTANCE.manager = new AutoCacheManager([defaultCache]);
 }

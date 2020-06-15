@@ -1,11 +1,36 @@
-import { initCache } from '../src/public-api'
+import { initCache, Cache } from '../src/public-api'
 import { UserService } from './UserService';
 
 
 const service = new UserService();
 
+class MyCache implements Cache {
+    readonly name: string;
+    private cache: Map<string, any> = new Map<string, any>();
+
+    constructor(name: string) {
+        this.name = name;
+    }
+
+    clear(): void {
+        this.cache.clear();
+    }
+
+    evict(key: string): void {
+        this.cache.delete(key);
+    }
+
+    get<T>(key: string): T {
+        return this.cache.get(key);
+    }
+
+    put<T>(key: string, value: T): void {
+        this.cache.set(key, value);
+    }
+}
+
 initCache({
-    type: 'memory',
+    cache: MyCache,
 })
 
 function main() {
