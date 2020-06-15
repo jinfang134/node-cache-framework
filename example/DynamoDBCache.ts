@@ -18,6 +18,10 @@ export class DynamoDBCache implements Cache {
         this.client = new AWS.DynamoDB.DocumentClient();
     }
 
+    keys(): string[] {
+        throw new Error('Method not implemented.');
+    }
+
     clear(): void {
         const params = {
             TableName: this.tableName,
