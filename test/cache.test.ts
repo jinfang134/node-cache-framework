@@ -13,11 +13,15 @@ class UserService {
     @Cacheable({ key: 'user_${id}' })
     getUser(id: number) {
         console.log('get user from db')
-        return {
-            id: 23,
-            name: 'user',
-            age: '23'
-        }
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve({
+                    id: 23,
+                    name: 'user',
+                    age: '23'
+                })
+            }, 1000)
+        })
     }
 
     @CachePut({ key: '${id}' })
@@ -43,11 +47,10 @@ initCache({})
 
 const cache = getCacheManager().getCache('hello')
 
-test('cache data at first time', t => {
-    const user = service.getUser(2);
-    t.deepEqual(cache.get('user_2'), user)
+test('cache data at first time', async  t => {
+    const user = await service.getUser(2);
+    t.deepEqual(cache.get('user_2'), user);
 })
-
 
 test('put data into cache', t => {
     const userData = { id: 3, name: 'test' }

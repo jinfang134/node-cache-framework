@@ -1,7 +1,7 @@
 import 'reflect-metadata/Reflect';
 import { getCacheManager, getKeyGenerator } from './CacheInstance';
 import { Cache } from './CacheModel';
-import { getParamNames } from './utils';
+import { getParamNames, isPromise } from './utils';
 
 export const METADATA_KEY_CACHE_DEFAULTS = '_cache_defaults';
 export const METADATA_KEY_CACHE_KEYS = '_cache_keys';
@@ -51,7 +51,12 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
       return oldVal;
     }
     const result = originalMethod.apply(this, args);
-    if (result !== undefined) {
+    if (isPromise(result)) {
+      result.then((data) => {
+        cache.put(cacheKey, data)
+        return data;
+      })
+    } else if (result !== undefined) {
       cache.put(cacheKey, result)
     }
     return result;
@@ -63,7 +68,12 @@ export function CachePut(params?: CacheableParams): MethodDecorator {
   params = getDefaultParams(params);
   return CacheAction<CacheableParams>((cache, cacheKey, originalMethod, args) => {
     const result: any = originalMethod.apply(this, args);
-    if (result !== undefined) {
+    if (isPromise(result)) {
+      result.then((data) => {
+        cache.put(cacheKey, data)
+        return data
+      })
+    } else if (result !== undefined) {
       cache.put(cacheKey, result)
     }
     return result;
