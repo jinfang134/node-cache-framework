@@ -52,13 +52,11 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
     }
     const result = originalMethod.apply(this, args);
     if (isPromise(result)) {
-      console.log('is promise')
       result.then((data) => {
         cache.put(cacheKey, data)
         return data;
       })
     } else if (result !== undefined) {
-      console.log('caching')
       cache.put(cacheKey, result)
     }
     return result;
