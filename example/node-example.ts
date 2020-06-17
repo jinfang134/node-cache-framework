@@ -1,4 +1,4 @@
-import { initCache, Cache, DynamoDBCache } from '../src/public-api'
+import { EnableCaching, Cache } from '../src/public-api'
 import { UserService } from './UserService';
 import { MyCache } from './MyCache';
 
@@ -6,8 +6,7 @@ import { MyCache } from './MyCache';
 const service = new UserService();
 
 
-initCache({
-    cache: DynamoDBCache,
+EnableCaching({
 })
 
 function main() {

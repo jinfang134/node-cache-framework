@@ -18,7 +18,7 @@ export function createCache(name: string): Cache {
   // return new CACHE_INSTANCE.cache(name);
 }
 
-export function initCache(config: CacheConfig) {
+export function EnableCaching(config: CacheConfig) {
   CACHE_INSTANCE.keyGenerator = config.keyGenerator || new HashKeyGenerator();
   CACHE_INSTANCE.cache = config.cache || MemoryCache
   const defaultCache: Cache = createCache('default')
