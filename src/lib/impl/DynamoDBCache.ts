@@ -1,6 +1,6 @@
 import AWS = require("aws-sdk");
-import { initCache, Cache } from '../src/public-api'
 import { DocumentClient, GetItemInput } from 'aws-sdk/clients/dynamodb';
+import { Cache } from '../CacheModel';
 
 AWS.config.update({
     region: "ap-northeast-1",
@@ -18,6 +18,10 @@ export class DynamoDBCache implements Cache {
         this.client = new AWS.DynamoDB.DocumentClient();
     }
 
+    keys(): string[] {
+        throw new Error('Method not implemented.');
+    }
+
     clear(): void {
         const params = {
             TableName: this.tableName,
@@ -25,7 +29,7 @@ export class DynamoDBCache implements Cache {
                 "tenant": 'hrtommt-develop#' + this.name,
             }
         };
-        this.client.delete(params)
+       this.client.delete(params).promise()
     }
 
     evict(key: string): void {
@@ -36,7 +40,7 @@ export class DynamoDBCache implements Cache {
                 id: key,
             }
         };
-        this.client.delete(params)
+        this.client.delete(params).promise()
     }
 
     async get<T>(key: string): Promise<T> {
@@ -64,6 +68,9 @@ export class DynamoDBCache implements Cache {
                 value
             }
         };
-        this.client.put(params)
+        this.client.put(params).promise().then((data) => {
+            console.log(data)
+        })
     }
 }
+

@@ -7,7 +7,7 @@ export class NoOpCache implements Cache {
   constructor(name: string) {
     this.name = name;
   }
-  keys(): string[] {
+  keys(): string[] | Promise<string[]> {
     throw new Error('Method not implemented.');
   }
 

@@ -10,7 +10,7 @@ export interface Cache {
   /**
    * Return the value to which this cache maps the specified key
    */
-  get<T>(key: string): T ;
+  get<T>(key: string): T | Promise<T>;
 
   /**
    * Associate the specified value with the specified key in this cache.
@@ -29,7 +29,7 @@ export interface Cache {
    */
   clear(): void;
 
-  keys(): string[];
+  keys(): string[] | Promise<string[]>;
 
 }
 
@@ -40,7 +40,3 @@ export interface CacheConfig {
   cache?: new (name: string) => Cache,
 }
 
-export enum CacheType {
-  MEMORY_CACHE,
-  LUR_CACHE,
-}

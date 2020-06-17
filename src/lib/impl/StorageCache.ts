@@ -10,7 +10,7 @@ export class StorageCache implements Cache {
     this.storage = storage;
   }
 
-  keys(): string[] {
+  keys(): string[] | Promise<string[]>{
     throw new Error('Method not implemented.');
   }
 

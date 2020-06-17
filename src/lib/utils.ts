@@ -1,4 +1,4 @@
-import crypto = require('crypto');  // 加载crypto库
+import crypto = require('crypto');
 
 /**
  * get parameter name for a function

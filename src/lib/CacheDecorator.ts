@@ -29,7 +29,7 @@ export function CacheConfig(cacheName: string): ClassDecorator {
   };
 }
 
-function CacheAction<T extends CacheParams>(action: (cache, cacheKey, originalMethod, args) => {}, params?: T): MethodDecorator {
+function CacheAction<T extends CacheParams>(action: (originTarget, cache, cacheKey, originalMethod, args) => {}, params?: T): MethodDecorator {
   params = getDefaultParams(params);
   return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
     const originalMethod = descriptor.value;
@@ -37,7 +37,7 @@ function CacheAction<T extends CacheParams>(action: (cache, cacheKey, originalMe
       const cache: Cache = getCache(target, params);
       const argsObj: any = getArgsObject(originalMethod, args)
       const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
-      return action(cache, cacheKey, originalMethod, args);
+      return action(this, cache, cacheKey, originalMethod, args);
     };
     return descriptor;
   };
@@ -45,62 +45,91 @@ function CacheAction<T extends CacheParams>(action: (cache, cacheKey, originalMe
 
 export function Cacheable(params?: CacheableParams): MethodDecorator {
   params = getDefaultParams(params);
-  return CacheAction<CacheableParams>((cache, cacheKey, originalMethod, args) => {
-    const oldVal: any = cache.get(cacheKey);
-    if (oldVal !== undefined) {
-      return oldVal;
-    }
-    const result = originalMethod.apply(this, args);
-    if (isPromise(result)) {
-      result.then((data) => {
-        cache.put(cacheKey, data)
-        return data;
-      })
-    } else if (result !== undefined) {
-      cache.put(cacheKey, result)
-    }
-    return result;
-  }, params)
+  return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
+    const originalMethod = descriptor.value;
+    descriptor.value = async function (...args: any[]) {
+      const cache: Cache = getCache(target, params);
+      const argsObj: any = getArgsObject(originalMethod, args)
+      const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
+      const oldVal: any = cache.get(cacheKey);
+      if (!isPromise(oldVal) && oldVal) {
+        return oldVal;
+      }
+      if (isPromise(oldVal)) {
+        const data = await oldVal
+        if (data !== undefined) {
+          return oldVal;
+        }
+      }
+      const result = originalMethod.apply(this, args);
+      if (isPromise(result)) {
+        result.then((data) => {
+          cache.put(cacheKey, data)
+          return data;
+        })
+      } else if (result !== undefined) {
+        cache.put(cacheKey, result)
+      }
+      return result;
+    };
+    return descriptor;
+  };
+
 }
 
 
 export function CachePut(params?: CacheableParams): MethodDecorator {
   params = getDefaultParams(params);
-  return CacheAction<CacheableParams>((cache, cacheKey, originalMethod, args) => {
-    const result: any = originalMethod.apply(this, args);
-    if (isPromise(result)) {
-      result.then((data) => {
-        cache.put(cacheKey, data)
-        return data
-      })
-    } else if (result !== undefined) {
-      cache.put(cacheKey, result)
-    }
-    return result;
-  }, params)
+  return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
+    const originalMethod = descriptor.value;
+    descriptor.value = function (...args: any[]) {
+      const cache: Cache = getCache(target, params);
+      const argsObj: any = getArgsObject(originalMethod, args)
+      const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
+      const result: any = originalMethod.apply(this, args);
+      if (isPromise(result)) {
+        result.then((data) => {
+          cache.put(cacheKey, data)
+          return data
+        })
+      } else if (result !== undefined) {
+        cache.put(cacheKey, result)
+      }
+      return result;
+    };
+    return descriptor;
+  };
+
 
 }
 
 export function CacheEvict(params?: CacheEvictParams): MethodDecorator {
   params = getDefaultParams(params);
-  return CacheAction<CacheEvictParams>((cache, cacheKey, originalMethod, args) => {
-    if (!params.afterInvocation) {
-      if (params.allEntries) {
-        cache.clear()
-      } else {
-        cache.evict(cacheKey);
+  return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
+    const originalMethod = descriptor.value;
+    descriptor.value = async function (...args: any[]) {
+      const cache: Cache = getCache(target, params);
+      const argsObj: any = getArgsObject(originalMethod, args)
+      const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
+      if (!params.afterInvocation) {
+        if (params.allEntries) {
+          await cache.clear()
+        } else {
+          await cache.evict(cacheKey);
+        }
       }
-    }
-    const result: any = originalMethod.apply(this, args);
-    if (params.afterInvocation) {
-      if (params.allEntries) {
-        cache.clear()
-      } else {
-        cache.evict(cacheKey);
+      const result: any = originalMethod.apply(this, args);
+      if (params.afterInvocation) {
+        if (params.allEntries) {
+          await cache.clear()
+        } else {
+          await cache.evict(cacheKey);
+        }
       }
-    }
-    return result;
-  }, params)
+      return result;
+    };
+    return descriptor;
+  };
 
 }
 
