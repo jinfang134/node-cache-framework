@@ -1,5 +1,23 @@
 import crypto = require('crypto');
 
+export function Measure(threshold) {
+    threshold = threshold || 0
+    return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
+        const oldValue: any = descriptor.value;
+        descriptor.value = async function () {
+            const start: number = new Date().getTime();
+            const res: any = await oldValue.apply(this, arguments);
+            const time: number = new Date().getTime() - start;
+            if (time > threshold) {
+                console.info(`called function [${name}], take: ${time} ms`);
+            }
+            return res;
+        };
+        return descriptor;
+    }
+}
+
+
 /**
  * get parameter name for a function
  *
