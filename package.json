@@ -15,7 +15,8 @@
     "dev": "tsc --build tsconfig.json -w",
     "test": "ava-ts  test/*.test.ts",
     "build": "tsc --build tsconfig.json",
-    "lint": "tslint --config tslint.json -q 'src/**/*.ts'"
+    "lint": "tslint --config tslint.json -q 'src/**/*.ts'",
+    "prepublish": "yarn test&& yarn build"
   },
   "main": "dist/src/public-api.js",
   "dependencies": {

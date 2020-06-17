@@ -1,6 +1,6 @@
 import crypto = require('crypto');
 
-export function Measure(threshold) {
+export function Measure(threshold): MethodDecorator {
     threshold = threshold || 0
     return (target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
         const oldValue: any = descriptor.value;
