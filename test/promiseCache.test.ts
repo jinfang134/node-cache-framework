@@ -1,5 +1,5 @@
 import test from 'ava';
-import { CacheConfig, Cacheable, CachePut, CacheEvict, getCacheManager, initCache, Cache, DynamoDBCache } from '../src/public-api';
+import { CacheConfig, Cacheable, CachePut, CacheEvict, getCacheManager, EnableCaching, Cache } from '../src/public-api';
 
 @CacheConfig('hello')
 class UserService {
@@ -97,8 +97,8 @@ class PromiseCache implements Cache {
 
 
 const service = new UserService();
-initCache({
-    cache: DynamoDBCache
+EnableCaching({
+    // cache: DynamoDBCache
 })
 
 const cache = getCacheManager().getCache('hello')

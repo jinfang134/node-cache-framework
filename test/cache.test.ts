@@ -1,5 +1,5 @@
 import test from 'ava';
-import { CacheConfig, Cacheable, CachePut, CacheEvict, getCacheManager, initCache } from '../src/public-api';
+import { CacheConfig, Cacheable, CachePut, CacheEvict, getCacheManager, EnableCaching } from '../src/public-api';
 
 @CacheConfig('hello')
 class UserService {
@@ -45,7 +45,7 @@ class UserService {
 }
 
 const service = new UserService();
-initCache({})
+EnableCaching({})
 
 const cache = getCacheManager().getCache('hello')
 
