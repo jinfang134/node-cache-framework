@@ -47,13 +47,14 @@ export class UserService {}
 As the name implies, @Cacheable is used to demarcate methods that are cacheable - that is, methods for whom the result is stored into the cache so on subsequent invocations (with the same arguments), the value in the cache is returned without having to actually execute the method.
 
 ```javascript
-    @Cacheable()
+    @Cacheable({key: '${id}_${name}'})
     find(id: number, name: string) {
         console.log('load from method.')
         return 'hello'
     }
 
 ```
+
 **params**
 
 | Name      | Comment                                           | Required |
@@ -69,9 +70,6 @@ As the name implies, @Cacheable is used to demarcate methods that are cacheable 
 
 #### @CacheEvict annotation
 
-The cache abstraction allows not just population of a cache store but also eviction. This process is useful for removing stale or unused data from the cache. Opposed to `@Cacheable`, annotation `@CacheEvict` demarcates methods that perform cache *eviction*, that is methods that act as triggers for removing data from the cache.
+The cache abstraction allows not just population of a cache store but also eviction. This process is useful for removing stale or unused data from the cache. Opposed to `@Cacheable`, annotation `@CacheEvict` demarcates methods that perform cache _eviction_, that is methods that act as triggers for removing data from the cache.
 
 params
-
-
-
