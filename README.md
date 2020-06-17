@@ -1,7 +1,7 @@
 # express-cache
 
-[![GitHub stars](https://img.shields.io/github/stars/jinfang134/vue-pipeline.svg?style=social&label=Stars&style=for-the-badge)](https://github.com/jinfang134/express-cache/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/jinfang134/vue-pipeline.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/jinfang134/express-cache/network)
+[![GitHub stars](https://img.shields.io/github/stars/jinfang134/express-cache.svg?style=social&label=Stars&style=for-the-badge)](https://github.com/jinfang134/express-cache/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/jinfang134/express-cache.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/jinfang134/express-cache/network)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/jinfang134/express-cache/blob/master/LICENSE)
 
 A easy-to-use cache resolution for node application inspired by spring cache. The caching abstraction allows consistent use of various caching solutions with minimal impact on the code.
@@ -23,10 +23,10 @@ You could check these 2 example below to get started.
 
 For caching declaration, the abstraction provides a set of Java annotations:
 
-- @Cacheable triggers cache population
-- @CacheEvict triggers cache eviction
-- @CachePut updates the cache without interfering with the method execution
-- @CacheConfig shares some common cache-related settings at class-level
+- `@CacheConfig` shares some common cache-related settings at class-level
+- `@Cacheable` triggers cache population
+- `@CacheEvict` triggers cache eviction
+- `@CachePut` updates the cache without interfering with the method execution
   Let us take a closer look at each annotation:
 
 #### @CacheConfig annotation
@@ -38,6 +38,9 @@ specifying the name of the cache to use for every cache operation of the class. 
 export class UserService {}
 ```
 
+**params**
+
+- name: cache name to use, if not specified, the `default` cache will be used.
 
 #### @Cacheable annotation
 
@@ -51,5 +54,20 @@ As the name implies, @Cacheable is used to demarcate methods that are cacheable 
     }
 
 ```
+**params**
 
-### Caching
+| Name      | Comment                                           | Required |
+| --------- | ------------------------------------------------- | -------- |
+| cacheName | cache name to use                                 | false    |
+| key       | specifying the key of the data saved in the cache | false    |
+| ttl       | ttl time, unit: ms                                | false    |
+
+**key example**
+
+- `${id}`
+- ${id}_${user.name}
+
+#### @CacheEvict annotation
+
+
+

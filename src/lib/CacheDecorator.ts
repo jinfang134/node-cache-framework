@@ -61,7 +61,6 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
           return oldVal;
         }
       }
-      console.log('this: ', this)
       const result = originalMethod.apply(this, args);
       if (isPromise(result)) {
         result.then((data) => {

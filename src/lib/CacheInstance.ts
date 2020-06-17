@@ -1,6 +1,6 @@
 import { CacheManager } from './cache-manager/CacheManager';
 import { MemoryCache } from './impl/MemoryCache';
-import { Cache, CacheType, CacheConfig } from './CacheModel';
+import { Cache, CacheConfig } from './CacheModel';
 import { AutoCacheManager } from './cache-manager/AutoCacheManager';
 import { DefaultKeyGenerator } from './key-generator/KeyGenerator';
 import { LoggingCache } from './impl/LoggingCache';

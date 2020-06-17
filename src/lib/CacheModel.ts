@@ -40,7 +40,3 @@ export interface CacheConfig {
   cache?: new (name: string) => Cache,
 }
 
-export enum CacheType {
-  MEMORY_CACHE,
-  LUR_CACHE,
-}
