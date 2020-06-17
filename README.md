@@ -69,5 +69,9 @@ As the name implies, @Cacheable is used to demarcate methods that are cacheable 
 
 #### @CacheEvict annotation
 
+The cache abstraction allows not just population of a cache store but also eviction. This process is useful for removing stale or unused data from the cache. Opposed to `@Cacheable`, annotation `@CacheEvict` demarcates methods that perform cache *eviction*, that is methods that act as triggers for removing data from the cache.
+
+params
+
 
 
