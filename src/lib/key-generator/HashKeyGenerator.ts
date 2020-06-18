@@ -6,7 +6,6 @@ export class HashKeyGenerator extends DefaultKeyGenerator {
         if (!key) {
             return propertyKey.toString() +'_'+ hash(JSON.stringify(args))
         }
-        console.log('args:', JSON.stringify(args))
         return this.template(key, args)
     }
 }
