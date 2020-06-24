@@ -8,11 +8,18 @@ services:
   - xvfb
 addons:
   chrome: stable
+cache: 
+  yarn: true
 before_script:
-  - npm install coveralls --save-dev
+  - yarn add -D coveralls
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version version-number
+  - export PATH="$HOME/.yarn/bin:$PATH"
+install:
+  - yarn
 after_success:
   - cat ./coverage/*/lcov.info | ./node_modules/coveralls/bin/coveralls.js
-  - npm run build
+  - yarn build
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
