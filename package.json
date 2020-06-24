@@ -10,7 +10,7 @@
     "express",
     "cache"
   ],
-  "author": "zuo_ji@worksap.co.jp",
+  "author": "jinfang134@sina.com",
   "scripts": {
     "dev": "tsc --build tsconfig.json -w",
     "test": "ava-ts  test/*.test.ts",
