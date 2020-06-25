@@ -4,7 +4,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/jinfang134/express-cache.svg?style=social&label=Fork&style=for-the-badge)](https://github.com/jinfang134/express-cache/network)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/jinfang134/express-cache/blob/master/LICENSE)
 [![Build Status](https://travis-ci.com/jinfang134/node-cache-framework.svg?branch=master)](https://travis-ci.com/jinfang134/node-cache-framework)
-
+[![Coverage Status](https://coveralls.io/repos/github/jinfang134/node-cache-framework/badge.svg)](https://coveralls.io/github/jinfang134/node-cache-framework)
 
 A easy-to-use cache resolution for node application inspired by spring cache. The caching abstraction allows consistent use of various caching solutions with minimal impact on the code.
 
