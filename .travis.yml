@@ -6,12 +6,8 @@ node_js:
   - '10'
 services:
   - xvfb
-addons:
-  chrome: stable
 cache: 
   yarn: true
-before_script:
-  - yarn add -D coveralls
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash 
   - export PATH="$HOME/.yarn/bin:$PATH"
