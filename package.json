@@ -21,7 +21,8 @@
   "description": "A easy-to-use cache resolution for node application inspired by spring cache. The caching abstraction allows consistent use of various caching solutions with minimal impact on the code.",
   "scripts": {
     "dev": "tsc --build tsconfig.json -w",
-    "test": "ava-ts  test/*.test.ts",
+    "test": "nyc ava-ts  test/*.test.ts --verbose",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "build": "tsc --build tsconfig.json",
     "lint": "tslint --config tslint.json -q 'src/**/*.ts'",
     "postversion": "git push origin master && git push --tags && npm publish --registry=https://registry.npmjs.org/",
@@ -34,10 +35,12 @@
   },
   "devDependencies": {
     "@types/node": "^12.11.1",
-    "ava": "^3.8.2",
+    "ava": "^2.2.2",
     "ava-ts": "^0.25.2",
     "codelyzer": "^5.1.2",
+    "coveralls": "^3.1.0",
     "husky": "^4.2.5",
+    "nyc": "^15.1.0",
     "ts-node": "~8.3.0",
     "tslint": "^6.1.2",
     "typescript": "~3.7.5",
