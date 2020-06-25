@@ -98,7 +98,7 @@ class PromiseCache implements Cache {
 
 const service = new UserService();
 EnableCaching({
-    // cache: DynamoDBCache
+    cache: PromiseCache
 })
 
 const cache = getCacheManager().getCache('hello')
