@@ -27,7 +27,6 @@ class UserService {
     @CachePut({ key: '${id}' })
     saveUser(id: number, user: any) {
         this.deleteAllUsers()
-        console.log('save to db:', user)
         return user
     }
 
@@ -39,7 +38,6 @@ class UserService {
 
     @CacheEvict({ allEntries: true })
     deleteAllUsers() {
-        console.log('db: delete all user')
     }
 }
 

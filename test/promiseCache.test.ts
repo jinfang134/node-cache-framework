@@ -11,7 +11,7 @@ class UserService {
 
     @Cacheable({ key: 'user_${id}' })
     getUser(id: number) {
-        console.log('get user from db')
+
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve({
@@ -25,7 +25,6 @@ class UserService {
 
     @CachePut({ key: '${id}' })
     saveUser(id: number, user: any) {
-        console.log('save to db:', user)
         return user
     }
 
@@ -102,7 +101,7 @@ EnableCaching({
 
 const cache = getCacheManager().getCache('hello')
 
-test.skip('cache data at first time', async () => {
+it('should cache data at first time', async () => {
     const user = await service.getUser(2);
     expect(await cache.get('user_2')).toEqual(user);
 })
@@ -119,7 +118,7 @@ test('evict for specific key in cache', async () => {
     expect(await cache.get('user_4')).toBe(undefined)
 })
 
-test.skip('clear cache', async () => {
+it('should clear cache', async () => {
     cache.clear()
     for (let i = 0; i < 10; i++) {
         service.saveUser(i, { id: i, name: 'name' + i })

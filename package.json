@@ -21,7 +21,7 @@
   "description": "A easy-to-use cache resolution for node application inspired by spring cache. The caching abstraction allows consistent use of various caching solutions with minimal impact on the code.",
   "scripts": {
     "dev": "tsc --build tsconfig.json -w",
-    "test": "jest test/*.ts --collect-coverage ",
+    "test": "jest test/*.ts --collect-coverage --notify",
     "coverage": "cat coverage/lcov.info | coveralls",
     "build": "tsc --build tsconfig.json",
     "lint": "tslint --config tslint.json -q 'src/**/*.ts'",
