@@ -26,7 +26,6 @@ class UserService {
 
     @CachePut({ key: '${id}' })
     saveUser(id: number, user: any) {
-        this.deleteAllUsers()
         return user
     }
 
@@ -37,12 +36,14 @@ class UserService {
 
 
     @CacheEvict({ allEntries: true })
-    deleteAllUsers() {
-    }
+    deleteAllUsers() { }
 }
 
 const service = new UserService();
-EnableCaching({})
+EnableCaching({
+    maxKeys: 10,
+    ttl: 1000// ms
+})
 
 const cache = getCacheManager().getCache('hello')
 
@@ -64,14 +65,30 @@ test('evict for specific key in cache', () => {
 })
 
 test('clear cache', () => {
-    cache.clear()
     for (let i = 0; i < 10; i++) {
         service.saveUser(i, { id: i, name: 'name' + i })
     }
     let keys = cache.keys() as string[];
-    expect(keys.length).toBe(1)
-    console.log(keys)
+    expect(keys.length).toBe(10)
     service.deleteAllUsers();
     keys = cache.keys() as string[]
     expect(keys.length).toBe(0)
+})
+
+test('should not contain more than maxkeys items in cache', () => {
+    cache.clear()
+    for (let i = 0; i < 20; i++) {
+        service.saveUser(i, { id: i, name: 'name' + i })
+    }
+    expect(cache.keys()).toHaveLength(10)
+})
+
+test('get item should be undefined after ttl reached', () => {
+    cache.clear();
+    const userData = { id: 3, name: 'test' }
+    const result = service.saveUser(3, userData);
+    expect(cache.get('3')).toEqual(userData)
+    setTimeout(() => {
+        expect(cache.get('3')).toEqual(undefined)
+    }, 1010)
 })

@@ -1,5 +1,5 @@
 import 'reflect-metadata/Reflect';
-import { getCacheManager, getKeyGenerator } from './CacheInstance';
+import { getCacheManager, getKeyGenerator, getConfig } from './CacheInstance';
 import { Cache } from './CacheModel';
 import { getParamNames, isPromise } from './utils';
 
@@ -19,7 +19,7 @@ export interface CacheEvictParams extends CacheParams {
 }
 
 export interface CacheableParams extends CacheParams {
-  ttl?: number // second
+  ttl?: number // ms
 }
 
 
@@ -89,7 +89,8 @@ export function CachePut(params?: CacheableParams): MethodDecorator {
       const result: any = originalMethod.apply(this, args);
       if (isPromise(result)) {
         result.then((data) => {
-          cache.put(cacheKey, data)
+          const ttl = getTtl(params)
+          cache.put(cacheKey, data, ttl)
           return data
         })
       } else if (result !== undefined) {
@@ -151,6 +152,11 @@ function getDefaultParams<T>(cacheParams: CacheParams): T {
   return Object.assign({
     afterInvocation: true
   }, cacheParams || {});
+}
+
+function getTtl(params: CacheableParams) {
+  const config = getConfig();
+  return params.ttl || config.ttl
 }
 
 
