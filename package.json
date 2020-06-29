@@ -9,9 +9,6 @@
     "type": "git",
     "url": "https://github.com/jinfang134/node-cache-framework"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "keywords": [
     "node",
     "express",
