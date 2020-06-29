@@ -1,4 +1,3 @@
-import test from 'ava';
 import { CacheConfig, Cacheable, CachePut, CacheEvict, getCacheManager, EnableCaching, Cache } from '../src/public-api';
 
 @CacheConfig('hello')
@@ -103,31 +102,31 @@ EnableCaching({
 
 const cache = getCacheManager().getCache('hello')
 
-test.skip('cache data at first time', async  t => {
+test.skip('cache data at first time', async () => {
     const user = await service.getUser(2);
-    t.deepEqual(await cache.get('user_2'), user);
+    expect(await cache.get('user_2')).toEqual(user);
 })
 
-test('put data into cache', async t => {
+test('put data into cache', async () => {
     const userData = { id: 3, name: 'test' }
     const result = service.saveUser(3, userData);
-    t.deepEqual(await cache.get('3'), userData)
+    expect(await cache.get('3')).toEqual(userData)
 })
 
-test('evict for specific key in cache', async t => {
+test('evict for specific key in cache', async () => {
     const user = service.getUser(4);
     service.deleteUser(4)
-    t.is(await cache.get('user_4'), undefined, '')
+    expect(await cache.get('user_4')).toBe(undefined)
 })
 
-test.skip('clear cache', async t => {
+test.skip('clear cache', async () => {
     cache.clear()
     for (let i = 0; i < 10; i++) {
         service.saveUser(i, { id: i, name: 'name' + i })
     }
     const keys = await cache.keys();
-    t.is(keys.length, 10)
+    expect(keys.length).toBe(10)
     service.deleteAllUsers();
     const keys2 = await cache.keys();
-    t.is(keys2.length, 0)
+    expect(keys2.length).toBe(0)
 })

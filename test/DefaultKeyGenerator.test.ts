@@ -1,16 +1,15 @@
-import test from 'ava';
 import { DefaultKeyGenerator } from '../src/public-api'
 
 const target: DefaultKeyGenerator = new DefaultKeyGenerator()
 
-test('get setting',  t => {
+test('get setting',  () => {
   const args: any = { name: 'test', id: 2 }
   const key: string = target.generate('test', 'getName', args);
-  t.is(key, `getName${JSON.stringify(args)}`);
+  expect(key).toBe(`getName${JSON.stringify(args)}`);
 });
 
 
-test('get setting',  t => {
+test('get setting',  () => {
   const args: any = {
     name: 'test',
     id: 2,
@@ -20,11 +19,11 @@ test('get setting',  t => {
     }
   }
   const key: string = target.generate('test', 'getName', args, "${ user.userId }+${name}");
-  t.is(key, args.user.userId + '+' + args.name);
+  expect(key).toBe(args.user.userId + '+' + args.name);
 });
 
-test('template',  t => {
+test('template',  () => {
   const args: any = { name: 'test', id: 2 }
   const str: string = target.template('${id}', args);
-  t.is(str, '2')
+  expect(str).toBe('2')
 })

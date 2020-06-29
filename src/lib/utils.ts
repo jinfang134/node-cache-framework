@@ -1,4 +1,4 @@
-import crypto = require('crypto');
+import * as crypto from 'crypto';
 
 export function Measure(threshold): MethodDecorator {
     threshold = threshold || 0
