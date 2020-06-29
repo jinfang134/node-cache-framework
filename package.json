@@ -22,7 +22,7 @@
   "scripts": {
     "dev": "tsc --build tsconfig.json -w",
     "test": "jest test/*.ts --collect-coverage ",
-    "coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
+    "coverage": "cat coverage/lcov.info | coveralls",
     "build": "tsc --build tsconfig.json",
     "lint": "tslint --config tslint.json -q 'src/**/*.ts'",
     "postversion": "git push origin master && git push --tags && npm publish --registry=https://registry.npmjs.org/"
@@ -45,14 +45,10 @@
     "@babel/preset-typescript": "^7.10.1",
     "@types/jest": "^26.0.3",
     "@types/node": "^12.11.1",
-    "ava": "^2.2.2",
-    "ava-ts": "^0.25.2",
     "babel-jest": "^26.1.0",
-    "codelyzer": "^5.1.2",
     "coveralls": "^3.1.0",
     "husky": "^4.2.5",
     "jest": "^26.1.0",
-    "nyc": "^15.1.0",
     "ts-node": "~8.3.0",
     "tslint": "^6.1.2",
     "typescript": "~3.7.5",
