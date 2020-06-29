@@ -29,6 +29,11 @@ class UserService {
         return user
     }
 
+    @CachePut({ key: 'user_ttl${id}', ttl: 500 })
+    saveUserTtl(id: number, user: any) {
+        return user
+    }
+
     @CacheEvict({ key: 'user_${id}' })
     deleteUser(id: number) {
         console.log('delete user from db')
@@ -83,12 +88,40 @@ test('should not contain more than maxkeys items in cache', () => {
     expect(cache.keys()).toHaveLength(10)
 })
 
-test('get item should be undefined after ttl reached', () => {
+test('get item should be undefined after ttl reached', done => {
     cache.clear();
     const userData = { id: 3, name: 'test' }
     const result = service.saveUser(3, userData);
     expect(cache.get('3')).toEqual(userData)
     setTimeout(() => {
         expect(cache.get('3')).toEqual(undefined)
-    }, 1010)
+        done()
+    }, 1100)
 })
+
+
+test('get item should not null before ttl reached', done => {
+    cache.clear();
+    const userData = { id: 3, name: 'test' }
+    const result = service.saveUser(3, userData);
+    expect(cache.get('3')).toEqual(userData)
+    setTimeout(() => {
+        expect(cache.get('3')).toEqual(userData)
+        done()
+    }, 500)
+})
+
+
+
+test('test function ttl setting', done => {
+    cache.clear();
+    const userData = { id: 3, name: 'test' }
+    service.saveUserTtl(4, userData);
+    expect(cache.get('user_ttl4')).toEqual(userData)
+    setTimeout(() => {
+        expect(cache.get('user_ttl4')).toEqual(undefined)
+        done()
+    }, 600)
+})
+
+

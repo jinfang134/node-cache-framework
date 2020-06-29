@@ -22,6 +22,7 @@ export class TTLCache implements Cache {
     }
 
     put<T>(key: string, value: T, ttl?: number): void | Promise<void> {
+        // console.log('set ttl: ', ttl)
         if (ttl > 0) {
             this.ttlMap.set(key, new Date().getTime() + ttl)
         }

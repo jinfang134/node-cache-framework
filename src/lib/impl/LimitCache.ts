@@ -27,7 +27,7 @@ export class LimitCache implements Cache {
         if (this.size > this.maxKeys) {
             this.cache.evict(this.keys()[0])
         }
-        this.cache.put(key, value)
+        this.cache.put(key, value, ttl)
     }
 
     evict(key: string): void | Promise<void> {
