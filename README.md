@@ -16,20 +16,28 @@ A easy-to-use cache resolution for node application inspired by spring cache. Th
 
 1. install package
 
-```
-yarn add cache-framework
-// npm install --save cache-framework
-```
+    ```
+    yarn add cache-framework
+    // npm install --save cache-framework
+    ```
 
 2. enable cache-framework in your application
 
-```
-app.use(EnableCaching({
-  ttl:1000*60,
-}))
-```
+    ```
+    EnableCaching({
+    ttl:1000*60,
+    })
+    ```
 
 3. Add annotation for your service
+    ```javascript
+    @CacheConfig('user')
+    class UserService{
+
+        @Cacheable()
+        getUser(){}
+    }
+    ```
 
 ### example
 
@@ -42,7 +50,7 @@ You could check these 2 example below to get started.
 
 ### Declarative annotation-based caching
 
-For caching declaration, the abstraction provides a set of Java annotations:
+For caching declaration, the abstraction provides a set of js annotations:
 
 - `@CacheConfig` shares some common cache-related settings at class-level
 - `@Cacheable` triggers cache population

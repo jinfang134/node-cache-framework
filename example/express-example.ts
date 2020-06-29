@@ -6,9 +6,9 @@ const app = express()
 
 const service = new UserService();
 
-app.use(EnableCaching({
+EnableCaching({
 
-}))
+})
 
 
 
