@@ -26,7 +26,11 @@ class UserService {
 
     @CachePut({ key: '${id}' })
     saveUser(id: number, user: any) {
-        this.deleteAllUsers()
+        return user
+    }
+
+    @CachePut({ key: 'user_ttl${id}', ttl: 500 })
+    saveUserTtl(id: number, user: any) {
         return user
     }
 
@@ -37,12 +41,14 @@ class UserService {
 
 
     @CacheEvict({ allEntries: true })
-    deleteAllUsers() {
-    }
+    deleteAllUsers() { }
 }
 
 const service = new UserService();
-EnableCaching({})
+EnableCaching({
+    maxKeys: 10,
+    ttl: 1000// ms
+})
 
 const cache = getCacheManager().getCache('hello')
 
@@ -57,21 +63,65 @@ test('put data into cache', () => {
     expect(cache.get('3')).toEqual(userData)
 })
 
-test('evict for specific key in cache', () => {
-    const user = service.getUser(4);
+test('evict for specific key in cache',async () => {
+    const user =await  service.getUser(4);
     service.deleteUser(4)
     expect(cache.get('user_4')).toBe(undefined)
 })
 
 test('clear cache', () => {
-    cache.clear()
     for (let i = 0; i < 10; i++) {
         service.saveUser(i, { id: i, name: 'name' + i })
     }
     let keys = cache.keys() as string[];
-    expect(keys.length).toBe(1)
-    console.log(keys)
+    expect(keys.length).toBe(10)
     service.deleteAllUsers();
     keys = cache.keys() as string[]
     expect(keys.length).toBe(0)
 })
+
+test('should not contain more than maxkeys items in cache', () => {
+    cache.clear()
+    for (let i = 0; i < 20; i++) {
+        service.saveUser(i, { id: i, name: 'name' + i })
+    }
+    expect(cache.keys()).toHaveLength(10)
+})
+
+test('get item should be undefined after ttl reached', done => {
+    cache.clear();
+    const userData = { id: 3, name: 'test' }
+    const result = service.saveUser(3, userData);
+    expect(cache.get('3')).toEqual(userData)
+    setTimeout(() => {
+        expect(cache.get('3')).toEqual(undefined)
+        done()
+    }, 1100)
+})
+
+
+test('get item should not null before ttl reached', done => {
+    cache.clear();
+    const userData = { id: 3, name: 'test' }
+    const result = service.saveUser(3, userData);
+    expect(cache.get('3')).toEqual(userData)
+    setTimeout(() => {
+        expect(cache.get('3')).toEqual(userData)
+        done()
+    }, 500)
+})
+
+
+
+test('test function ttl setting', done => {
+    cache.clear();
+    const userData = { id: 3, name: 'test' }
+    service.saveUserTtl(4, userData);
+    expect(cache.get('user_ttl4')).toEqual(userData)
+    setTimeout(() => {
+        expect(cache.get('user_ttl4')).toEqual(undefined)
+        done()
+    }, 600)
+})
+
+

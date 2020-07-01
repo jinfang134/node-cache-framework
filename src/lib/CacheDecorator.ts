@@ -1,5 +1,5 @@
 import 'reflect-metadata/Reflect';
-import { getCacheManager, getKeyGenerator } from './CacheInstance';
+import { getCacheManager, getKeyGenerator, getConfig } from './CacheInstance';
 import { Cache } from './CacheModel';
 import { getParamNames, isPromise } from './utils';
 
@@ -19,7 +19,7 @@ export interface CacheEvictParams extends CacheParams {
 }
 
 export interface CacheableParams extends CacheParams {
-  ttl?: number // second
+  ttl?: number // ms
 }
 
 
@@ -52,6 +52,7 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
       const argsObj: any = getArgsObject(originalMethod, args)
       const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
       const oldVal: any = cache.get(cacheKey);
+      const ttl = getTtl(params)
       if (!isPromise(oldVal) && oldVal) {
         return oldVal;
       }
@@ -64,11 +65,11 @@ export function Cacheable(params?: CacheableParams): MethodDecorator {
       const result = originalMethod.apply(this, args);
       if (isPromise(result)) {
         result.then((data) => {
-          cache.put(cacheKey, data)
+          cache.put(cacheKey, data, ttl)
           return data;
         })
       } else if (result !== undefined) {
-        cache.put(cacheKey, result)
+        cache.put(cacheKey, result, ttl)
       }
       return result;
     };
@@ -87,13 +88,14 @@ export function CachePut(params?: CacheableParams): MethodDecorator {
       const argsObj: any = getArgsObject(originalMethod, args)
       const cacheKey: string = getKeyGenerator().generate(target, propertyKey, argsObj, params.key);
       const result: any = originalMethod.apply(this, args);
+      const ttl = getTtl(params)
       if (isPromise(result)) {
         result.then((data) => {
-          cache.put(cacheKey, data)
+          cache.put(cacheKey, data, ttl)
           return data
         })
       } else if (result !== undefined) {
-        cache.put(cacheKey, result)
+        cache.put(cacheKey, result, ttl)
       }
       return result;
     };
@@ -151,6 +153,11 @@ function getDefaultParams<T>(cacheParams: CacheParams): T {
   return Object.assign({
     afterInvocation: true
   }, cacheParams || {});
+}
+
+function getTtl(params: CacheableParams) {
+  const config = getConfig();
+  return params.ttl || config.ttl || 0
 }
 
 

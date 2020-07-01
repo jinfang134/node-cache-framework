@@ -17,17 +17,17 @@ export interface Cache {
    * If the cache previously contained a mapping for this key, the old
    * value is replaced by the specified value.
    */
-  put<T>(key: string, value: T): void;
+  put<T>(key: string, value: T, ttl?: number): void | Promise<void>;
 
   /**
    * Evict the mapping for this key from this cache if it is present.
    */
-  evict(key: string): void;
+  evict(key: string): void | Promise<void>;
 
   /**
    * Remove all mappings from the cache.
    */
-  clear(): void;
+  clear(): void | Promise<void>;
 
   keys(): string[] | Promise<string[]>;
 

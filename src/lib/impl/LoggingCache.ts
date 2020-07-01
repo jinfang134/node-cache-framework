@@ -30,11 +30,11 @@ export class LoggingCache implements Cache {
         }
         return value;
     }
-    put<T>(key: string, value: T): void {
+    put<T>(key: string, value: T, ttl?: number): void {
         if (this.logEnable) {
             console.log(`caching data in [${this.name}], key: ${key}, value: ${JSON.stringify(value)}`)
         }
-        this.cache.put(key, value)
+        this.cache.put(key, value, ttl)
     }
     evict(key: string): void {
         if (this.logEnable) {

@@ -2,14 +2,14 @@ import { DefaultKeyGenerator } from '../src/public-api'
 
 const target: DefaultKeyGenerator = new DefaultKeyGenerator()
 
-test('get setting',  () => {
+test('should return a key as json format',  () => {
   const args: any = { name: 'test', id: 2 }
   const key: string = target.generate('test', 'getName', args);
   expect(key).toBe(`getName${JSON.stringify(args)}`);
 });
 
 
-test('get setting',  () => {
+test('should return a key generated with key template',  () => {
   const args: any = {
     name: 'test',
     id: 2,
@@ -22,7 +22,7 @@ test('get setting',  () => {
   expect(key).toBe(args.user.userId + '+' + args.name);
 });
 
-test('template',  () => {
+test('should return a string replaced with js template.',  () => {
   const args: any = { name: 'test', id: 2 }
   const str: string = target.template('${id}', args);
   expect(str).toBe('2')
