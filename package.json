@@ -1,6 +1,6 @@
 {
   "name": "cache-framework",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "license": "MIT",
   "engines": {
     "node": ">=6.4.0"
