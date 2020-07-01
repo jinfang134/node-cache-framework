@@ -63,8 +63,8 @@ test('put data into cache', () => {
     expect(cache.get('3')).toEqual(userData)
 })
 
-test('evict for specific key in cache', () => {
-    const user = service.getUser(4);
+test('evict for specific key in cache',async () => {
+    const user =await  service.getUser(4);
     service.deleteUser(4)
     expect(cache.get('user_4')).toBe(undefined)
 })
